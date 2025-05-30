@@ -1,8 +1,6 @@
-// api/webhook.js
-
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method === "GET") {
-    const VERIFY_TOKEN = "miperfil123"; // Cambiá esto por el token que vos quieras usar
+    const VERIFY_TOKEN = "miperfil123"; // Cambiá por tu token seguro
 
     const mode = req.query["hub.mode"];
     const token = req.query["hub.verify_token"];
@@ -15,11 +13,14 @@ export default function handler(req, res) {
       } else {
         res.sendStatus(403);
       }
+    } else {
+      res.sendStatus(400); // Bad Request si falta algo
     }
   } else if (req.method === "POST") {
     console.log("Webhook recibido: ", JSON.stringify(req.body, null, 2));
-    res.sendStatus(200); // siempre respondé 200
+    res.status(200).send('EVENT_RECEIVED');
   } else {
-    res.sendStatus(405); // método no permitido
+    res.sendStatus(405); // Method Not Allowed
   }
 }
+
